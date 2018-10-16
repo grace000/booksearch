@@ -3,11 +3,15 @@ import './Result.css'
 
 export default class Result extends Component {
   render() {
-    const { result } = this.props;
+    const { result, error } = this.props;
     return (
       <div className="result-wrapper">
         <div className="result-box">
           <div className="result-text">
+            {
+              error &&
+              <h3>{error}</h3>
+            }
             {
               result.infoLink && result.title &&
               <h3>
@@ -35,8 +39,10 @@ export default class Result extends Component {
           </div>
           <div className="result-image">
             {
-              result.imageLinks.smallThumbnail &&
-              <img src={result.imageLinks.smallThumbnail} alt=""/>
+              result.imageLinks && 
+              (
+                <img src={result.imageLinks.smallThumbnail} alt="" />
+              )
             }
           </div>
         </div>

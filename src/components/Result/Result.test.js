@@ -21,7 +21,7 @@ describe('Result Component', () => {
     shallow(<Result result={result}/>);
   });
 
-  it('Given result data, renders the result title', () => {
+  it('Given result data, renders the result author', () => {
     const wrapper = mount(<Result {...props} />);
     expect(wrapper.find('.author').text()).toBe("Tim O'Reilly");
   });
@@ -31,8 +31,13 @@ describe('Result Component', () => {
     expect(wrapper.find('.title').text()).toBe("The Twitter Book");
   });
 
-  it('Given result data, renders the result title', () => {
+  it('Given result data, renders the result description', () => {
     const wrapper = mount(<Result {...props} />);
     expect(wrapper.find('.search-snippet').text()).toBe("Twitter is not just for talking about your breakfast anymore. It’s...");
+  });
+
+  it('Given result data, renders the result image', () => {
+    const wrapper = mount(<Result {...props} />);
+    expect(wrapper.find("img").prop("src")).toEqual("http://books.google.com/books/content?id=Jy1jfJm0H…=frontcover&img=1&zoom=5&edge=curl&source=gbs_api");
   });
 });

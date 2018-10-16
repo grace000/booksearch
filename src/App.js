@@ -6,7 +6,8 @@ import { runQuery } from './components/utility/helpers';
 
 class App extends Component {
   state = {
-    results:[]
+    results:[],
+    errorStatus: undefined
   }
 
   getBooks = (e) => {
@@ -14,21 +15,26 @@ class App extends Component {
     const term = e.target.elements.search.value;
     e.target.reset();
 
-    runQuery(term).then(data => {
-      this.setState({results:[]})
-      const bookList = data.items;
-      console.log(bookList);
-      this.setState({results:bookList})
-    })
+    runQuery(term)
+      .then(data => {
+        this.setState({results:[]})
+        const bookList = data.items;
+        console.log(bookList);
+        this.setState({results:bookList})
+      })
+      .catch(error => {
+          this.setState({errorStatus: "search returned no results"})
+      })
   }
   render() {
-    const { results } = this.state;
+    const { results, errorStatus } = this.state;
     return (
       <div className="App">
         <div className="query-container">
           <Query getBooks={this.getBooks} />
         </div>
         <div className="results-container">
+          {errorStatus && <p>{errorStatus}</p>}
           {results.length === 0 && <p>Start your book search!</p>}
           {results.map(result => <Result 
             key={result.id}

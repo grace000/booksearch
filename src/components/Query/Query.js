@@ -4,7 +4,7 @@ import './Query.css'
 const Query = props => (
     <div className="query-wrapper">
         <h1 className="query-title">BookSearch</h1>
-        <form onSubmit={props.getBooks}>
+        <form className="query-form" onSubmit={props.getBooks}>
             <input 
                 className="query-input"
                 type ="text" 
