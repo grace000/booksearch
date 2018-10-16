@@ -19,7 +19,6 @@ class App extends Component {
       .then(data => {
         this.setState({results:[]})
         const bookList = data.items;
-        console.log(bookList);
         this.setState({results:bookList})
       })
       .catch(error => {

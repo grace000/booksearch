@@ -3,15 +3,11 @@ import './Result.css'
 
 export default class Result extends Component {
   render() {
-    const { result, error } = this.props;
+    const { result } = this.props;
     return (
       <div className="result-wrapper">
         <div className="result-box">
           <div className="result-text">
-            {
-              error &&
-              <h3>{error}</h3>
-            }
             {
               result.infoLink && result.title &&
               <h3>
