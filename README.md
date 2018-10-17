@@ -1,6 +1,6 @@
 # BookSearch
 
-Search the GoogleBooks database for books
+Search the GoogleBooks database for books [DEMO](https://tiffs-booksearch.herokuapp.com/)
 
 _[Node][2] + [Express][3] + [React][5] + [Create-React-App][4]_
 
