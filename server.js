@@ -1,8 +1,5 @@
 const express = require('express');
 const path = require('path');
-require('dotenv').config();
-
-const api = process.env.REACT_APP_API_URL;
 
 const app = express();
 const PORT = process.env.PORT || 5000;
