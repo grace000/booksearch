@@ -3,7 +3,7 @@ const bookRoutes = require('./bookRoutes');
 const userRoutes = require('./userRoutes');
 
 // routes
-router.use(bookRoutes);
-router.use(userRoutes);
+router.use('/api/user/books', bookRoutes);
+router.use('/users', userRoutes);
 
 module.exports = router;

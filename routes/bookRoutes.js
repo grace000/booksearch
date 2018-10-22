@@ -2,34 +2,46 @@ const express = require('express');
 const router = express.Router();
 const Book = require('../models/Book');
 const User = require('../models/User');
+const session = require('cookie-session');
+const config = require('../config');
+
+router.use(session({ signed: true, secret: config.cookieSecret }));
 
 //GET ALL USERS BOOKS 
-router.get('/api/user/books', (req, res, next) => {
-  const userId = req.user._id;
+router.get('/', (req, res, next) => {
+  const userId = req.session.user.id;
   const userQuery = User.findById(userId).select("books");
   
-  UserQuery.exec((err,products) => {
+  userQuery.exec((err,products) => {
     if (err) return next(err);
     res.send(products);
   });
 });
 
 // GET ONE USER BOOK
-router.get('/api/user/books/:id', (req, res, next) => {
-    Book.find({id:req.body.id}, (err,product) => {
-        if (err) return next(err);
-        res.json(product);
+router.get('/:id', (req, res, next) => {
+  const userId = req.session.user.id;
+  const userQuery = User.findById(userId).select("books");
+  
+  userQuery
+    .populate("id", req.body.id)
+    .exec((err,product) => {
+      if (err) return next(err);
+      res.send(product);
     });
 });
 
 // SAVE BOOK to user's profile
-router.post('/api/user/books', (req, res, next) => {
+router.post('/', (req, res, next) => {
+  if (! req.body.title)
+    return next(new Error('Must at lease provide book title'));
+  
   const newBook = new Book(req.body.book);
   
   newBook.save((err, product) => {
     if (err) return next(err);
       User.findOneAndUpdate(
-        {_id:req.body.userId}, 
+        {_id:req.session.user.id}, 
         {$push:{books:product._id}}, 
         {new:true}, (err, doc) => {
           if(err) return next(err);
@@ -40,9 +52,9 @@ router.post('/api/user/books', (req, res, next) => {
 });
 
 // DELETE BOOK from user's profile
-router.delete('/api/user/books/:id', (req, res, next) => {
-  const userId = req.user.id;
-  const bookId = req.params.id;
+router.delete('/:id', (req, res, next) => {
+  const userId = req.session.user.id;
+  const bookId = req.body.book.id;
 
   User.findOneAndUpdate(
     {_id:userId},
