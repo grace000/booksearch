@@ -7,23 +7,33 @@ const config = require('../config');
 
 router.use(session({ signed: true, secret: config.cookieSecret }));
 
-//GET ALL USERS BOOKS 
+//GET books for one user
 router.get('/', (req, res, next) => {
   const userId = req.session.user.id;
-  const userQuery = User.findById(userId).select("books");
+  const bookQuery = Book.find({users: userId});
+  // const bookQuery = Book.find({users: userId}).select('-users');
   
-  userQuery.exec((err,products) => {
+  bookQuery.exec((err,products) => {
     if (err) return next(err);
+    console.log(products);
     res.send(products);
+  });
+});
+
+// GET all books saved
+router.get('/allbooks', (req, res, next) => {
+  Book.find({}, (err,data) => {
+    console.log(data);
+    res.send(data);
   });
 });
 
 // GET ONE USER BOOK
 router.get('/:id', (req, res, next) => {
   const userId = req.session.user.id;
-  const userQuery = User.findById(userId).select("books");
+  const bookQuery = Book.find({}).select(["users", userId]);
   
-  userQuery
+  bookQuery
     .populate("id", req.body.id)
     .exec((err,product) => {
       if (err) return next(err);
@@ -31,34 +41,43 @@ router.get('/:id', (req, res, next) => {
     });
 });
 
-// SAVE BOOK to user's profile
+// SAVE user to book profile
 router.post('/', (req, res, next) => {
   if (! req.body.title)
     return next(new Error('Must at lease provide book title'));
   
-  const newBook = new Book(req.body.book);
+  const preBookSearch = Book.findById(req.body.book.id);
+  const userId = req.session.user.id;
+
+  if (!preBookSearch){
+    const newBook = new Book(req.body.book);
   
-  newBook.save((err, product) => {
-    if (err) return next(err);
-      User.findOneAndUpdate(
-        {_id:req.session.user.id}, 
-        {$push:{books:product._id}}, 
-        {new:true}, (err, doc) => {
-          if(err) return next(err);
-          res.send(doc);
-      });
-  });
+    newBook.save((err, product) => {
+      if (err) return next(err);
+        res.send(product);
+    });
   console.log("book saved!");
+  } 
+  else {
+    Book.findOneAndUpdate(
+      {id:preBookSearch}, 
+      {$push:{users:userId}}, 
+      {new:true}, (err, doc) => {
+        if(err) return next(err);
+        res.send(doc);
+    });
+  }
+  console.log("book already exists");
 });
 
-// DELETE BOOK from user's profile
+// DELETE user from book profile
 router.delete('/:id', (req, res, next) => {
   const userId = req.session.user.id;
-  const bookId = req.body.book.id;
+  const bookId = req.params.id;
 
-  User.findOneAndUpdate(
-    {_id:userId},
-    {$pull:{books:bookId}},
+  Book.find(
+    {id:bookId},
+    {$pull:{users:userId}},
     {new:true},
     (err,product) => {
       if(err) return next(err);

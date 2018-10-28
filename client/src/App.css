@@ -1,35 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto|Shrikhand');
 
-.App {
-  display: grid;
-  margin: 0;
-  padding:0;
-  background-color:var(--grey-300);
-  height: 100vh;
-  overflow-x: auto;
-  font-size: 1.5rem; /* 18px */
-}
-
-@media (min-width: 60rem) {
-  .App {
-    grid-template-columns: 1fr 2fr;
-  }
-}
-
-@media (min-width: 30rem) {
-  .query-container {
-    margin: 2rem;
-  }
-}
-
-.results-container {
-  margin: 1rem;
-  overflow-y: scroll;
-  box-shadow: 1rem 1.5rem var(--purple-300);
-  background-color: var(--orange-100);
-  border: .2rem solid var(--purple-300);
-}
-
 :root {
   /* 12px */
   font-size: 75%;

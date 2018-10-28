@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const mongojs = require('mongojs');
 require('dotenv').config();
 const config = require('./config');
+const cors = require('cors');
 
 //Import book and user models
 const Book = require('./models/Book');
@@ -23,6 +24,7 @@ const PORT = process.env.PORT || 5000;
 const routes = require('./routes');
 app.use(routes);
 
+
 // Configure express, priority serve any static files
 app.use(express.static(path.resolve(__dirname, 'client/build')));
 app.use(bodyParser.json());
@@ -39,19 +41,43 @@ mongoose.connect(mongoURI,{ useNewUrlParser: true })
   .then(() => console.log(`connection successful to ${mongoURI}`))
   .catch((err)=>console.error(`error connecting to: ${mongoURI}`, err));
 
+const options = {
+  origin: true,
+  methods: ['GET']
+}
+
 /* Redirect user to OAuth 2.0 login URL */
-app.get('/login', function(req, res) {
+app.get('/login', cors(options), function(req, res) {
   var authenticationUrl = auth.getAuthenticationUrl();
+  console.log("logging in");
   res.redirect(authenticationUrl);
 });
 
 /* Use OAuth 2.0 authorization code to fetch user's profile */
+// app.get('/oauth2callback', function(req, res, next) {
+//   if (!req.query.code){
+//     res.json({userAvailable: false })
+//   } 
+//   else {
+//     auth.getUser(req.query.code, function(err, user) {
+//       if (err) return next(err);
+//       req.session.user = user;
+//       res.redirect('/');
+//     });
+//   }
+// });
+
 app.get('/oauth2callback', function(req, res, next) {
-  auth.getUser(req.query.code, function(err, user) {
-    if (err) return next(err);
-    req.session.user = user;
-    res.redirect('/');
-  });
+  if (typeof req.query.code === 'undefined') {
+    res.json({userAvailable: "false"});
+  }  
+  if(req.query.code){
+      auth.getUser(req.query.code, function(err, user) {
+        if (err) return next(err);
+        req.session.user = user;
+        res.redirect('/');
+      });
+    } 
 });
 
 /* Clear the session */
