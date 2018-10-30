@@ -26,7 +26,10 @@ class Home extends Component {
           })
         } else {
           const bookList = data.items;
-          this.setState({results:bookList})
+          this.setState({
+            results:bookList,
+            errorStatus: undefined
+          })
         }
         
       })
