@@ -1,0 +1,48 @@
+.query-title {
+    font-family: 'Shrikhand', cursive;
+    font-size: 5rem;
+    color: var(--purple-500);
+    margin-bottom: 0;
+    margin-left: 1rem;
+}
+
+input[type=text], select {
+    width: 100%;
+    padding: 1rem 1rem;
+    margin: 0;
+    display: inline-block;
+    border: .1rem solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 2rem;
+}
+
+.query-input:focus {
+    outline: none;
+    box-shadow: none;
+    border: 1px solid var(--orange-500);
+}
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 30px white inset;
+}
+
+.query-btn {
+    width: 100%;
+    background-color:var(--orange-500);
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 2rem;
+}
+
+.query-btn:hover {
+    background-color: var(--orange-700);
+}
+
+.query-btn:focus {
+    outline:0;
+}
