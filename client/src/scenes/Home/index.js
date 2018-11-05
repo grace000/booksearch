@@ -3,6 +3,7 @@ import './styles.css';
 import Query from '../../components/Query';
 import Book from '../../components/Book';
 import { runQuery } from '../../services/utility/helpers';
+import Login from '../../components/Login/index';
 
 class Home extends Component {
   state = {
@@ -36,17 +37,24 @@ class Home extends Component {
   }
   render() {
     const { results, errorStatus } = this.state;
+  
     return (
       <div className="Home">
         <div className="query-container">
           <Query getBooks={this.getBooks} />
+          <div className="login-container">
+            <Login isAuthenticated={this.props.isAuthenticated}/>
+          </div>
         </div>
         <div className="books-container">
           <p>{errorStatus}</p>
           {results && results.length === 0 && <p>Start your book search!</p>}
-          {results && results.map(result => <Book 
-            key={result.id}
-            result={result.volumeInfo}
+          {results && results.map(result => 
+            <Book 
+              key={result.id}
+              id={result.id}
+              result={result.volumeInfo}
+              isAuthenticated={this.props.isAuthenticated}
           />)}
         </div>
       </div>
