@@ -3,9 +3,14 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const BookSchema = new Schema({
-    title: String,
     id: String,
-    url: String
+    title: String,
+    authors: [String],
+    description: String,
+    publisher: String,
+    image: String,
+    infoLink: String,
+    users: [String]
 });
 
 // Create the Model

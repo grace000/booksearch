@@ -1,48 +1,62 @@
-import React, { Component } from 'react';
-import './App.css';
-import Query from './components/Query/Query';
-import Result from './components/Result/Result';
-import { runQuery } from './components/utility/helpers';
+import React, { Component } from 'react'
+import './App.css'
+import SavedBooks from './scenes/SavedBooks'
+import Home from './scenes/Home'
+import {
+  BrowserRouter as Router,
+  Route,
+  Redirect
+} from 'react-router-dom'
+import axios from 'axios'
 
-class App extends Component {
+const ProtectedRoute = ({ component: Comp, isAuthenticated, path, ...rest }) => {
+  return (
+    <Route
+      path={path}
+      {...rest}
+      render={props => {
+        return isAuthenticated ? <Comp {...props} /> : <Redirect to="/" />;
+      }}
+    />
+  );
+};
+
+
+export default class App extends Component {
   state = {
-    results:[],
-    errorStatus: undefined
+    isAuthenticated: false
   }
 
-  getBooks = (e) => {
-    e.preventDefault();
-    const term = e.target.elements.search.value;
-    e.target.reset();
-
-    runQuery(term)
-      .then(data => {
-        this.setState({results:[]})
-        const bookList = data.items;
-        this.setState({results:bookList})
-      })
-      .catch(error => {
-          this.setState({errorStatus: "search returned no results"})
-      })
+  checkAuthentication = () => {
+    axios.get('/user').then(response => {
+      if (response.data.userAvailable === "false") {
+        this.setState({
+          isAuthenticated: false
+        })
+      } else {
+        this.setState({
+          isAuthenticated: true
+        })
+      }
+    })
   }
+
+  componentDidMount() {
+    this.checkAuthentication();
+  }
+  
+
   render() {
-    const { results, errorStatus } = this.state;
     return (
       <div className="App">
-        <div className="query-container">
-          <Query getBooks={this.getBooks} />
-        </div>
-        <div className="results-container">
-          {errorStatus && <p>{errorStatus}</p>}
-          {results.length === 0 && <p>Start your book search!</p>}
-          {results.map(result => <Result 
-            key={result.id}
-            result={result.volumeInfo}
-          />)}
-        </div>
+        <Router>
+          <div>
+            <Route exact path="/" 
+                    render={(props) => <Home {...props} isAuthenticated={this.state.isAuthenticated} />}/>
+            <ProtectedRoute path="/savedbooks" isAuthenticated={this.state.isAuthenticated} component={SavedBooks} />
+          </div>
+        </Router>
       </div>
-    );
+    )
   }
 }
-
-export default App;

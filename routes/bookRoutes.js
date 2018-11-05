@@ -1,18 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const Book = require('../models/Book');
-const User = require('../models/User');
 const session = require('cookie-session');
 const config = require('../config');
 
 router.use(session({ signed: true, secret: config.cookieSecret }));
 
-//GET ALL USERS BOOKS 
+//GET books for one user
 router.get('/', (req, res, next) => {
   const userId = req.session.user.id;
-  const userQuery = User.findById(userId).select("books");
+  const bookQuery = Book.find({users: userId});
   
-  userQuery.exec((err,products) => {
+  bookQuery.exec((err,products) => {
     if (err) return next(err);
     res.send(products);
   });
@@ -21,9 +20,9 @@ router.get('/', (req, res, next) => {
 // GET ONE USER BOOK
 router.get('/:id', (req, res, next) => {
   const userId = req.session.user.id;
-  const userQuery = User.findById(userId).select("books");
+  const bookQuery = Book.find({}).select(["users", userId]);
   
-  userQuery
+  bookQuery
     .populate("id", req.body.id)
     .exec((err,product) => {
       if (err) return next(err);
@@ -31,40 +30,42 @@ router.get('/:id', (req, res, next) => {
     });
 });
 
-// SAVE BOOK to user's profile
+// SAVE user to book profile
 router.post('/', (req, res, next) => {
-  if (! req.body.title)
-    return next(new Error('Must at lease provide book title'));
   
-  const newBook = new Book(req.body.book);
-  
-  newBook.save((err, product) => {
-    if (err) return next(err);
-      User.findOneAndUpdate(
-        {_id:req.session.user.id}, 
-        {$push:{books:product._id}}, 
+  const userId = req.session.user.id;
+  Book.find({"id": req.body.id}).countDocuments((err,count) => {
+    if (count === 0){
+      const newBook = new Book({
+        id: req.body.id,
+        title: req.body.title,
+        authors: req.body.authors,
+        description: req.body.description,
+        publisher: req.body.publisher,
+        image: req.body.image,
+        infoLink: req.body.infoLink,
+        users: userId
+      });
+
+      newBook.save((err, product) => {
+      if (err) return next(err);
+        console.log("book saved!");
+        res.send(product);
+      });
+    }
+    else {
+      Book.findOneAndUpdate(
+        {"id":req.body.id}, 
+        {$push:{users:userId}}, 
         {new:true}, (err, doc) => {
           if(err) return next(err);
+          console.log("book already exists, users updated");
           res.send(doc);
       });
-  });
-  console.log("book saved!");
+    }
+  })
+
 });
 
-// DELETE BOOK from user's profile
-router.delete('/:id', (req, res, next) => {
-  const userId = req.session.user.id;
-  const bookId = req.body.book.id;
-
-  User.findOneAndUpdate(
-    {_id:userId},
-    {$pull:{books:bookId}},
-    {new:true},
-    (err,product) => {
-      if(err) return next(err);
-      res.send(product);
-    })
-  console.log("book deleted!");
-});
 
 module.exports = router;
