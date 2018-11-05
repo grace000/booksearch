@@ -6,8 +6,7 @@ const config = {
     oauth2: {
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      // redirectUrl: process.env.REDIRECT_URL || 'http://localhost/authorize/oauth2callback'
-      redirectUrl: 'http://localhost:5000/oauth2callback'
+      redirectUrl: process.env.REDIRECT_URL || 'http://localhost:5000/authorize/oauth2callback'
     }
   };
 
