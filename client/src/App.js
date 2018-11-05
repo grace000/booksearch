@@ -1,13 +1,26 @@
 import React, { Component } from 'react'
 import './App.css'
-import Main from './components/Main/Main'
-import SavedBooks from './components/SavedBooks/SavedBooks'
+import SavedBooks from './scenes/SavedBooks'
+import Home from './scenes/Home'
 import {
   BrowserRouter as Router,
   Route,
-  Link
+  Redirect
 } from 'react-router-dom'
 import axios from 'axios'
+
+const ProtectedRoute = ({ component: Comp, isAuthenticated, path, ...rest }) => {
+  return (
+    <Route
+      path={path}
+      {...rest}
+      render={props => {
+        return isAuthenticated ? <Comp {...props} /> : <Redirect to="/" />;
+      }}
+    />
+  );
+};
+
 
 export default class App extends Component {
   state = {
@@ -15,21 +28,19 @@ export default class App extends Component {
   }
 
   checkAuthentication = () => {
-    axios.get('/oauth2callback').then(response => {
+    axios.get('/user').then(response => {
       if (response.data.userAvailable === "false") {
-        console.log("no user available");
         this.setState({
           isAuthenticated: false
         })
       } else {
-        console.log("user available");
         this.setState({
           isAuthenticated: true
         })
       }
     })
   }
-  
+
   componentDidMount() {
     this.checkAuthentication();
   }
@@ -40,8 +51,9 @@ export default class App extends Component {
       <div className="App">
         <Router>
           <div>
-            <Route exact path="/" component={Main}/>
-            <Route path="/user" component={SavedBooks}/>
+            <Route exact path="/" 
+                    render={(props) => <Home {...props} isAuthenticated={this.state.isAuthenticated} />}/>
+            <ProtectedRoute path="/savedbooks" isAuthenticated={this.state.isAuthenticated} component={SavedBooks} />
           </div>
         </Router>
       </div>

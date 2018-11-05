@@ -1,0 +1,21 @@
+.login-link > a {
+    text-decoration: none;
+    color: var(--green-400);
+    font-size: 2rem;
+ }
+
+ .login-link :hover {
+    color: var(--green-700);
+ }
+
+ .logged-nav-item > a {
+    text-decoration: none;
+    color: var(--green-400);
+    font-size: 2rem;
+ }
+
+ .logged-nav-item :hover {
+    color: var(--green-700);
+ }
+
+

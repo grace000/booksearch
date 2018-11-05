@@ -16,8 +16,8 @@ _[Node][2] + [Express][3] + [React][5] + [Create-React-App][4]_
 
 1. Clone this repo locally `git clone https://github.com/grace000/booksearch.git`
 2. Install dependencies `npm install`
-3. Start the server `npm start`
-4. Visit http://localhost:5000 in the browser
+3. Start the development build `cd client && npm start`
+4. Visit http://localhost:3000 in the browser
 
 ## License
 

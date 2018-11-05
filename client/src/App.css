@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto|Shrikhand');
+@import url('https://fonts.googleapis.com/css?family=Roboto|Shrikhand|Monoton|Kumar+One+Outline');
 
 :root {
   /* 12px */
@@ -22,8 +22,12 @@
   --purple-700: rgb(31, 26, 61);
   --purple-900: rgb(6, 5, 12);
 
+  --green-100: rgb(163, 196, 188);
+  --green-200: rgb(219, 244, 222);
   --green-300: rgb(18, 221, 126);
-  --green-700: rgb(11, 148, 84);
+  --green-400: rgb(58,183,149);
+  --green-500: rgb(34,109,89);
+  --green-700: rgb(20,65,53);
 
   --red-500: rgb(228, 86, 67);
   --red-700: rgb(172, 54, 39);
@@ -44,4 +48,10 @@ ul {
 p,
 a {
   line-height: 1.5;
+}
+
+.App {
+  overflow-y: scroll;
+  height: 100vh;
+
 }

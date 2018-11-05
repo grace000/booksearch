@@ -1,0 +1,34 @@
+.Home {
+    display: grid;
+    margin: 0;
+    padding:0;
+    background-color:var(--grey-300);
+    height: 100vh;
+    overflow-x: auto;
+    font-size: 1.5rem; /* 18px */
+}
+  
+@media (min-width: 60rem) {
+    .Home {
+        grid-template-columns: 1fr 2fr;
+    }
+}
+
+@media (min-width: 30rem) {
+    .query-container {
+      margin: 2rem;
+    }
+}
+
+.query-container {
+    display: grid;
+    grid-template-rows: 1fr;
+}
+  
+.books-container {
+    margin: 1rem;
+    overflow-y: scroll;
+    box-shadow: 1rem 1.5rem var(--purple-300);
+    background-color: var(--orange-100);
+    border: .2rem solid var(--purple-300);
+}

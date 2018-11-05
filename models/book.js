@@ -9,7 +9,7 @@ const BookSchema = new Schema({
     description: String,
     publisher: String,
     image: String,
-    url: String,
+    infoLink: String,
     users: [String]
 });
 

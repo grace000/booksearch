@@ -1,0 +1,97 @@
+@media (min-width: 30rem) {
+    .header-container {
+      margin: 2rem;
+    }
+  }
+  
+.books-container {
+    margin: 1rem;
+    overflow-y: scroll;
+    box-shadow: 1rem 1.5rem var(--purple-300);
+    background-color: var(--orange-100);
+    border: .2rem solid var(--purple-300);
+}
+
+.SavedBooks {
+    display: grid;
+    margin: 0;
+    padding:0;
+    background-color:var(--grey-300);
+    height: 100vh;
+    overflow-x: auto;
+    font-size: 1.5rem; /* 18px */
+}
+  
+@media (min-width: 60rem) {
+    .SavedBooks {
+        grid-template-columns: 1fr 2fr;
+    }
+}
+
+.header-container {
+    display: grid;
+    grid-template-rows: 1fr;
+}
+
+.mybooks-title {
+    font-family: 'Shrikhand', cursive;
+    font-size: 5rem;
+    color: var(--purple-500);
+    margin-bottom: 0;
+    margin-left: 1rem;
+}
+
+.result-box {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--grey-100);
+    margin: 2rem;
+    padding: 2rem;
+    border-radius: .5rem;
+    -webkit-box-shadow: 0px 0px 23px 3px var(--orange-300);
+    -moz-box-shadow: 0px 0px 23px 3px var(--orange-300);
+    box-shadow: 0px 0px 23px 3px var(--orange-300);
+    display:grid;
+     
+}
+
+@media (min-width: 40rem) {
+    .result-box {
+        display:grid;
+        grid-template-columns: 2fr 1fr; 
+    }
+}
+
+.title {
+    color: var(--purple-700);
+    text-decoration: none;
+}
+
+.publisher {
+    font-style: italic;
+}
+
+.search-snippet {
+   margin: .5rem;
+   color: var(--grey-900);
+}
+
+.result-image {
+    margin: .5rem;
+}
+
+ul {
+    list-style-type: none;
+}
+
+li {
+    display: inline;
+    padding-right: .5rem;
+}
+
+a {
+    color: var(--orange-700);
+}
+
+a:hover {
+    color: var(--orange-500);
+}
