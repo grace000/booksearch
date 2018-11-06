@@ -63,6 +63,7 @@ app.get('/login', cors(options), function(req, res) {
    }
  });
 
+ /* Send authentication message for client */
  app.get('/user', function (req, res) {
    if (req.session.user){
      res.json({userAvailable: "true"});
